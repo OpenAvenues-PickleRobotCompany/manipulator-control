@@ -31,8 +31,11 @@ class PID:
         pass
 
     def compute_command(self, desired_state: float, current_state: float):
-        pass
-
+        error = desired_state - current_state
+        p = self.kp * error
+        d = self.kd * error / self.ts
+        i = self.ki * error * self.ts
+        return p+d+i
 
 
 if __name__ == '__main__':
