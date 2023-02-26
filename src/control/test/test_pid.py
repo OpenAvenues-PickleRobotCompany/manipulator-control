@@ -1,4 +1,5 @@
 from src.control.pid import *
+import matplotlib.pyplot as plt
 import numpy
 
 def test_proportional():
@@ -50,7 +51,7 @@ def test_pid_plotting():
     while abs(desired_state - current_state) > 0.1:
         command = pid.compute_command(desired_state=desired_state, current_state=current_state)
         commands.append(command)
-        current_state += command
+        current_state += command #dont just add 
 
     
     time = [ts*i for i in range(len(commands))]
