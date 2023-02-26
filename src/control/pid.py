@@ -1,6 +1,7 @@
 from enum import Enum
 import matplotlib.pyplot as plt 
 import numpy as np
+import math
 
 class DiscretizationMethod(Enum):
     EULER_FORWARD = 'euler_forward'
@@ -52,7 +53,7 @@ class PID:
         
         return command
     
-#using image on slide27, project session 2 as reference
+#Forward Kinematics: given theta1, theta2, l1, and l2 for a 2-link planar arm, determine the end effector position
 class forward_kinematics_planar:
     def __init__(self, theta1: float, theta2: float,  
                  l1:float, l2: float):
@@ -76,10 +77,24 @@ class forward_kinematics_planar:
         
         return joint1_pos, end_effector_pos
     
-# class inverse_kinematics_planar: 
+
+#Inverse kinematics: given the end effector position, lengths, and alpha (theta1+theta2), calculate theta1, theta2 which satisfies it
 class inverse_kinematics_planar:
-    def __init__(self, end_effector_pos:float, )
+    def __init__(self, end_effector_pos:float, l1:float, l2:float, 
+                alpha:float):
     
+        self.x = end_effector_pos[0]
+        self.y = end_effector_pos[1] 
+        self.l1 = l1
+        self.l2 = l2 
+        self.alpha = alpha 
+        
+    def compute_angles(self): 
+        theta2 = math.acos(self.x**2 + self.y**2 - self.l2**2 - self.l1**2 / (2*self.l1*self.l2))
+        theta1 = self.alpha - theta2 
+        
+        return theta1, theta2 
+            
 
     
     
