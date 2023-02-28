@@ -25,31 +25,36 @@ class PID:
         self.ts = ts
         self.max_output = 100
         self.min_output = -100
+        self.integral = 0
+        self.last_error = 0
         self.discretization_method = discretization_method
+        self.Discretization_method()
 
-        self.discretize()
-
-    def discretize(self):
-        kp_d = self.kp
-        ki_d = self.ki * self.ts
-        kd_d = self.kd / self.ts
-        pid_d = PID (kp_d, ki_d, kd_d, self.ts)
-        return pid_d
+    def Discretization_method(self):
+        self.kp_d = self.kp * self.ts
+        self.ki_d = self.ki * self.ts
+        self.kd_d = self.kd / self.ts
+        
 
     def compute_command(self, desired_state: float, current_state: float):
         error = desired_state - current_state
+        self.integral += error * self.ts
+        derivative = (error - self.last_error) / self.ts
+
         p = self.kp * error
-        d = self.kd * (error-self.last_error) / self.ts
-        i = self.ki * (error+self.last_error)/2 * self.ts
-        #antiwind?
-        if i > self.max_output:
-            i = self.max_output
-        elif i < self.min_output:
-            i = self.min_output
+        i = self.ki * self.integral
+        d = self.kd * derivative
+
+        command = p + i + d
+
+        if command > self.max_output:
+            command = self.max_output
+        elif command < self.min_output:
+            command = self.min_output
 
         self.last_error = error
-        return p+d+i
 
+        return command
 
 if __name__ == '__main__':
     pass
@@ -60,3 +65,20 @@ def forward_kinematics_2R(theta1, theta2, L1, L2):
     y = L1*m.sin(theta1) + L2*m.sin(theta1+theta2)
     phi = theta1 + theta2
     return x, y, phi
+
+
+
+def inverse_kinematics_2R(x, y, L1, L2):
+    # calculate the distance from the origin to the end effector
+    r = m.sqrt(x**2 + y**2)
+
+    # calculate the angle theta2
+    cos_theta2 = (r**2 - L1**2 - L2**2) / (2 * L1 * L2)
+    sin_theta2 = m.sqrt(1 - (cos_theta2)**2)
+    theta2 = m.atan2(sin_theta2, cos_theta2)
+
+    # calculate the angle theta1
+    alpha = m.atan2(y, x)
+    beta = m.atan2(L2 * sin_theta2, L1 + L2 * cos_theta2)
+    theta1 = alpha - beta
+    return theta1, theta2
