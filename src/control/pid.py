@@ -28,73 +28,40 @@ class PID:
         
         self.previous_error = 0  
         self.i = 0  #integral error
+        self.T_t = .05 #tracking time, how fast integral term will be reset
 
 
 def compute_command(self, desired_state: float, current_state: float):
     
     error = desired_state - current_state #current error
     
-    p = self.kp*error
+    p = self.kp*error #proportional error
     
-    self.i += self.ts*(self.ki*error) #i(t_k + 1) = i(t_k) + kh/T_i * e(t_k)
+    self.i += self.ts * (self.ki*error) #integral term 
     
-    d = (error - self.previous_error) / self.ts     #derivative of the error (euler backward: using previous error)
+    d = (error - self.previous_error) / self.ts #derivative of the error (euler backward: using previous error)
     
     command = p + self.i + d 
     
-    self.previous_error = error
-    
-    #Antiwindup: If the actuator is saturated (reached its physical limit), the error will keep accumulating. 
-    #Prevent this by adjusting command if it hits a saturation limit
-    #saturation_limits = (lower_limit, upper_limit)
     if command < self.saturation_limits[0]:
-        command = self.saturation_limits[0]
+        saturated_command = self.saturation_limits[0]
+        e_p = saturated_command - command
+        self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
+        command = p + self.i + d
         
     if command > self.saturation_limits[1]:
-        command = self.saturation_limits[1] 
+        saturated_command = self.saturation_limits[1] 
+        e_p = saturated_command - command
+        self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
+        command = p + self.i + d
+        
+    self.previous_error = error
     
     
+        
     return command
     
-#Forward Kinematics: given theta1, theta2, l1, and l2 for a 2-link planar arm, determine the end effector position
-class forward_kinematics_planar:
-    def __init__(self, theta1: float, theta2: float,  
-                l1:float, l2: float):
-        
-        self.theta1=theta1
-        self.theta2=theta2
 
-        self.l1=l1
-        self.l2=l2
-
-    #computes positions relative to joint 0 position (x0,y0)
-    def compute_positions(self):
-        
-        x1 = self.l1*np.cos(self.theta1)
-        y1 = self.l1*np.sin(self.theta1)
-        joint1_pos = (x1,y1) 
-        
-        x2 = x1 + self.l2*np.cos(self.theta1+self.theta2)
-        y2 = y1 + self.l2*np.sin(self.theta1+self.theta2)
-        end_effector_pos = (x2,y2)
-        
-        return joint1_pos, end_effector_pos
-
-
-#Inverse kinematics: given the end effector position, lengths, and alpha (theta1+theta2), calculate theta1, theta2 which satisfies it
-class inverse_kinematics_planar:
-    def __init__(self, end_effector_pos:float, l1:float, l2:float):
-        self.x = end_effector_pos[0]
-        self.y = end_effector_pos[1] 
-        self.l1 = l1
-        self.l2 = l2 
-                
-    def compute_angles(self): 
-        theta2 = math.acos(self.x**2 + self.y**2 - self.l2**2 - self.l1**2 / (2*self.l1*self.l2))
-        #theta1 = atan2(y,x) - gamma
-        theta1 = math.atan2(self.y,self.x) - math.atan2(self.l2*np.sin(theta2),self.l1+self.l2*np.cos(self.theta2))
-        return theta1, theta2 
-            
     
 if __name__ == '__main__':
     pass
