@@ -5,7 +5,6 @@ import math
 class forward_kinematics_planar:
     def __init__(self, theta1: float, theta2: float,  
                 l1:float, l2: float):
-        
         self.theta1=theta1
         self.theta2=theta2
 
@@ -35,9 +34,24 @@ class inverse_kinematics_planar:
         self.l2 = l2 
     
     #Computes angles to make the end effector position possible
-    def compute_angles(self): 
-        theta2 = math.acos(self.x**2 + self.y**2 - self.l2**2 - self.l1**2 / (2*self.l1*self.l2))
-        #theta1 = atan2(y,x) - gamma
-        theta1 = math.atan2(self.y,self.x) - math.atan2(self.l2*np.sin(theta2),self.l1+self.l2*np.cos(self.theta2))
-        return theta1, theta2 
-            
+    def compute_angles(self):
+    # Compute the argument of acos()
+        arg = (self.x**2 + self.y**2 - self.l2**2 - self.l1**2) / (2*self.l1*self.l2)
+
+        #Clipping the values for cosine...getting math out of domain errors
+        # Check if the argument is within the valid range
+        if arg > 1.0:
+            arg = 1.0
+        elif arg < -1.0:
+            arg = -1.0
+
+        # Compute theta2 using acos()
+        theta2 = math.acos(arg)
+
+        # Compute theta1 using atan2()
+        numerator = self.y*self.l1 - self.x*self.l2*np.sin(theta2)
+        denominator = self.x*self.l2*np.cos(theta2) + self.y*self.l1
+        theta1 = math.atan2(numerator, denominator)
+
+        return theta1, theta2
+        

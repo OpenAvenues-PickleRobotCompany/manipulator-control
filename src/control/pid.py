@@ -6,7 +6,6 @@ import math
 class DiscretizationMethod(Enum):
     EULER_BACKWARD = 'euler_backward'
 
-
 class P:
     def __init__(self, kp: float):
         self.kp = kp
@@ -25,41 +24,43 @@ class PID:
         
         self.saturation_limits = (-1000,1000)
         
+        self.i=0
         self.previous_error = 0  
-        self.i = 0  #integral error
         self.T_t = .05 #tracking time, how fast integral term will be reset
 
 
-def compute_command(self, desired_state: float, current_state: float):
-    
-    error = desired_state - current_state #current error
-    
-    p = self.kp*error #proportional error
-    
-    self.i += self.ts * (self.ki*error) #integral term 
+    def compute_command(self, desired_state: float, current_state: float):
+        
+        error = desired_state - current_state #current error
+        
+        #proportional error
+        p = self.kp*error 
 
-    d = (error - self.previous_error) / self.ts #derivative of the error (euler backward: using previous error)
-    
-    command = p + self.i + d 
-    
-    if command < self.saturation_limits[0]:
-        saturated_command = self.saturation_limits[0]
-        e_p = saturated_command - command
-        self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
-        command = p + self.i + d
+        #integral term 
+        self.i += self.ts * (self.ki*error) 
         
-    if command > self.saturation_limits[1]:
-        saturated_command = self.saturation_limits[1] 
-        e_p = saturated_command - command
-        self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
-        command = p + self.i + d
+        #derivative of the error (euler backward: using previous error)
+        d = (error - self.previous_error) / self.ts 
         
-    self.previous_error = error
-    
-    
+        command = p + self.i + d 
         
-    return command
-    
+        #if the command is past a saturation point, recompute it. e_p may be negative if the integral error is winded up 
+        if command < self.saturation_limits[0]:
+            saturated_command = self.saturation_limits[0]
+            e_p = saturated_command - command
+            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
+            command = p + self.i + d
+            
+        if command > self.saturation_limits[1]:
+            saturated_command = self.saturation_limits[1] 
+            e_p = saturated_command - command
+            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
+            command = p + self.i + d
+            
+        self.previous_error = error
+
+        return command
+        
 
     
 if __name__ == '__main__':
