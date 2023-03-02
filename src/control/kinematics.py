@@ -12,7 +12,7 @@ class forward_kinematics_planar:
         self.l1=l1
         self.l2=l2
 
-#computes positions relative to joint 0 position (x0,y0)
+    #Computes positions relative to joint 0 position (x0,y0)
     def compute_positions(self):
         
         x1 = self.l1*np.cos(self.theta1)
@@ -33,7 +33,8 @@ class inverse_kinematics_planar:
         self.y = end_effector_pos[1] 
         self.l1 = l1
         self.l2 = l2 
-                
+    
+    #Computes angles to make the end effector position possible
     def compute_angles(self): 
         theta2 = math.acos(self.x**2 + self.y**2 - self.l2**2 - self.l1**2 / (2*self.l1*self.l2))
         #theta1 = atan2(y,x) - gamma

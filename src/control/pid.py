@@ -5,7 +5,6 @@ import math
 
 class DiscretizationMethod(Enum):
     EULER_BACKWARD = 'euler_backward'
-    #Update this
 
 
 class P:
@@ -38,7 +37,7 @@ def compute_command(self, desired_state: float, current_state: float):
     p = self.kp*error #proportional error
     
     self.i += self.ts * (self.ki*error) #integral term 
-    
+
     d = (error - self.previous_error) / self.ts #derivative of the error (euler backward: using previous error)
     
     command = p + self.i + d 
