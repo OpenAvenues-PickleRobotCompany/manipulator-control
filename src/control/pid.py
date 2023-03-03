@@ -1,5 +1,7 @@
 from enum import Enum
 import math as m
+import pybullet as p
+import time 
 
 class DiscretizationMethod(Enum):
     EULER_FORWARD = 'euler_forward'
@@ -27,18 +29,15 @@ class PID:
         self.min_output = -100
         self.integral = 0
         self.last_error = 0
+        self.last_output = 0
+        self.T_t = 1
         self.discretization_method = discretization_method
-        self.Discretization_method()
-
-    def Discretization_method(self):
-        self.kp_d = self.kp * self.ts
-        self.ki_d = self.ki * self.ts
-        self.kd_d = self.kd / self.ts
         
 
     def compute_command(self, desired_state: float, current_state: float):
         error = desired_state - current_state
-        self.integral += error * self.ts
+        ep = desired_state - self.last_output
+        self.integral += error * self.ts + (1/self.T_t)*ep
         derivative = (error - self.last_error) / self.ts
 
         p = self.kp * error
@@ -46,11 +45,19 @@ class PID:
         d = self.kd * derivative
 
         command = p + i + d
-
         if command > self.max_output:
-            command = self.max_output
+            aw_term = self.kp * (command - self.max_output)
+            self.integral -= aw_term / self.ki + (1/self.T_t) * ep
+            command = p + self.integral + d
+            if command > self.max_output:
+                command = self.max_output
+
         elif command < self.min_output:
+            aw_term = self.kp * (command - self.min_output)
+            self.integral -= (aw_term / self.ki) + (1/self.T_t) * ep
             command = self.min_output
+            if command < self.min_output:
+                command = self.min_output
 
         self.last_error = error
 
@@ -67,7 +74,6 @@ def forward_kinematics_2R(theta1, theta2, L1, L2):
     return x, y, phi
 
 
-
 def inverse_kinematics_2R(x, y, L1, L2):
     # calculate the distance from the origin to the end effector
     r = m.sqrt(x**2 + y**2)
@@ -82,3 +88,6 @@ def inverse_kinematics_2R(x, y, L1, L2):
     beta = m.atan2(L2 * sin_theta2, L1 + L2 * cos_theta2)
     theta1 = alpha - beta
     return theta1, theta2
+
+
+
