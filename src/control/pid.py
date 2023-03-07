@@ -98,7 +98,8 @@ physicsClient = p.connect(p.GUI)
 start_pos = [0,0,0]
 start_orientation = p.getQuaternionFromEuler([0,0,0])
 
-pendulum_id = p.loadURDF("src/robot/double_pendulum.urdf", start_pos, start_orientation, useFixedBase=True)
+pendulum_id = p.loadURDF("src/robot\double_pendulum_with_saturation.urdf", start_pos, start_orientation, useFixedBase=True)
+
 p.setGravity(0,0,GRAVITY)
 
 theta1 = 0.0
@@ -106,9 +107,9 @@ theta2 = 0.0
 p.resetJointState(pendulum_id, 0, theta1)
 p.resetJointState(pendulum_id, 1, theta2)
 
-goal = [1,2,0]
-kp = 0.1  # Proportional 
-ki = 0  # Integral 
+goal = [2,2,0]
+kp = 10  # Proportional 
+ki = 1  # Integral 
 kd = 0  # Derivative 
 ts = 1/240
 
@@ -116,14 +117,18 @@ pid1 = PID(kp, ki, kd, ts, discretization_method=DiscretizationMethod.EULER_FORW
 pid2 = PID(kp, ki, kd, ts, discretization_method=DiscretizationMethod.EULER_FORWARD)
 
 L1 = L2 = 2
-theta1_goal, theta2_goal = inverse_kinematics_2R(goal[0], goal[1], L1, L2)
+theta1_goal, theta2_goal = m.pi/3, m.pi/2
 
-for i in range(1000):
+for i in range(5000):
+    theta1 = p.getJointState(pendulum_id, 0)[0]
+    theta2 = p.getJointState(pendulum_id, 1)[0]
     torque1 = pid1.compute_command(theta1_goal, theta1)
     torque2 = pid2.compute_command(theta2_goal, theta2)
     p.setJointMotorControl2(pendulum_id, 0, p.TORQUE_CONTROL, force=torque1)
     p.setJointMotorControl2(pendulum_id, 1, p.TORQUE_CONTROL, force=torque2)
-    theta1, theta2 = p.getJointStates(pendulum_id, [0, 1])[0][:2]
+    #theta1, theta2 = p.getJointStates(pendulum_id, [0, 1])[0][:2]
+    #print(theta1_goal - theta1, theta2_goal - theta2)
+    #print('torque:',torque1,torque2)
     p.stepSimulation()
     time.sleep(1./240.)
 p.disconnect()
