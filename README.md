@@ -39,6 +39,7 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Use inverse kinematics to obtain the desired theta1, theta2.
 - Use PID1, PID2 to obtain torque command based on the desired-current theta values.
 - Apply this torque command to the body id from URDF (setJointMotorControl)
+- Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
 ### Sources
 
