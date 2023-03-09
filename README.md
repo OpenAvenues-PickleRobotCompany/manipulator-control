@@ -2,7 +2,7 @@
 
 For this project, a robot manipulator is directed by a PID controller.
 
-## 1. 2R Manipulator
+## 1) 2R Manipulator
 A manipulator with two rotary joints, also known as revolute joints, is referred to as a 2R manipulator. The two revolute joints enable the robot arm to rotate within two degrees of freedom. The base joint rotates around a fixed axis, while the shoulder joint rotates around an axis that is perpendicular to the first joint. These joints allow the robot arm to move in a two-dimensional plane.
 
 <p align="center">
