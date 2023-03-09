@@ -41,6 +41,15 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Apply this torque command to the body id from URDF (setJointMotorControl)
 - Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/71537050/224162645-cde76955-18fc-4b49-bc3d-b8e67ad76b84.png">
+</p>
+<p align="center">
+  PyBullet 2R Simulation. Desired End Effector Position: x=0.5, y=-0.3, z=0
+</p>
+
+ 
+
 ### Sources
 
 - Chakraborty, Nilanjan & Akella, Srinivas & Trinkle, J.C. (Jeff). (2009). Complementarity-based Dynamic Simulation for Kinodynamic Motion Planning. 2009 IEEE/RSJ International Conference on Intelligent Robots and Systems, IROS 2009. 787 - 794. 10.1109/IROS.2009.5354274. 
