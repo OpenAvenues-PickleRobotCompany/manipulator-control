@@ -9,7 +9,7 @@ A manipulator with two rotary joints, also known as revolute joints, is referred
   <img src="https://user-images.githubusercontent.com/71537050/224106200-a9d1e3ca-1321-4dbd-9417-7389fe0f5a11.png">
 </p>
 <p align="center">
-  Diagram from Chakraborty et al.(2009) showing a 2R manipulator.
+  Diagram from Chakraborty et al. (2009) showing a 2R manipulator.
 </p>
 
 One relevant application of a 2R manipulator is in pick-and-place operations. This involves a robot arm being fixed on a base and having an end effector (some sort of gripper or suction cup) to grab ojects. Since this case is limited to two degrees of freedom, it is more well-suited for situations where items are arranged in a plane (such as a conveyor belt or production line). 
