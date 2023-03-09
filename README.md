@@ -41,7 +41,10 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Apply this torque command to the body id from URDF (setJointMotorControl)
 - Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
-
+<p align="center">
+  <img src="https://prnt.sc/F9FPrtdWySzu">
+</p>
+<p align="center">
 
 ### Sources
 
