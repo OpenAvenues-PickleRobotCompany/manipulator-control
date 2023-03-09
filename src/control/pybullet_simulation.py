@@ -13,13 +13,14 @@ def main():
 # 5) Apply this torque command to the body id from URDF.
     
     #Initializing physics client, gravity
+    physicsClient = p.connect(p.GUI)
     p.setGravity(0, 0, -9.81) #sets gravity
     
     #Initializing start position and orientation
     start_pos = [0,0,0]
     start_orientation = p.getQuaternionFromEuler([0,0,0]) #converts roll pitch yaw angles of obj to quaternion
     
-    pendulum_id = p.loadURDF("../robot/double_pendulum_with_saturation.urdf",start_pos, start_orientation) #move one directory up
+    pendulum_id = p.loadURDF("../robot/double_pendulum_with_saturation.urdf",start_pos, start_orientation, useFixedBase=1) #move one directory up
     p.setTimeStep(1./240.) #updates the simulation every 1/240 seconds (240 times per second)
 
     # Set up PID controllers
@@ -31,7 +32,7 @@ def main():
     pid1 = PID(kp, kd, ki, ts, discretization_method)
     pid2 = PID(kp, kd, ki, ts, discretization_method)
 
-    end_effector_pos = [0, 1, 0] # x, y, z position of the end effector
+    end_effector_pos = [1, 2, 0] # x, y, z position of the end effector
     
     l1 = 1 
     l2 = 1  
