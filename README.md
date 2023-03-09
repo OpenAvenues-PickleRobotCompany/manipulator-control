@@ -15,11 +15,7 @@ A manipulator with two rotary joints, also known as revolute joints, is referred
 One relevant application of a 2R manipulator is in pick-and-place operations. This involves a robot arm being fixed on a base and having an end effector (some sort of gripper or suction cup) to grab ojects. Since this case is limited to two degrees of freedom, it is more well-suited for situations where items are arranged in a plane (such as a conveyor belt or production line). 
 
 ## 2) PID Control
-PID (Proportional-Integral-Derivative) is a control algorithm commonly used in engineering applications. It is a feedback loop that continuously adjusts an output based on the difference between a desired setpoint and the measured process variable. The PID controller calculates a command output based on three terms: the proportional term (P), the integral term (I), and the derivative term (D). The proportional term is proportional to the error between the desired setpoint and the measured process variable. The integral term accumulates the error over time and compensates for steady-state errors. The derivative term predicts the future trend of the error and compensates for overshooting or oscillations. 
-
-For this implementation, a desired end effector position is defined. Then, the current angles of the joints are fed into our inverse kinematics algorithm to compute desired angles. The desired angles are given to two PID controllers (for each joint) which generate torque commands based on the error between the desired and current angles. The simulation then applies the torque commands to the body id provided by the URDF. 
-
-Further details on how the PID is implemented are given below: 
+PID (Proportional-Integral-Derivative) is a control algorithm commonly used in engineering applications. It is a feedback loop that continuously adjusts an output based on the difference between a desired setpoint and the measured process variable. The PID controller calculates a command output based on three terms: the proportional term (P), the integral term (I), and the derivative term (D). The proportional term is proportional to the error between the desired setpoint and the measured process variable. The integral term accumulates the error over time and compensates for steady-state errors. The derivative term predicts the future trend of the error and compensates for overshooting or oscillations.  
 
 #### 2a) Time Discretization
 
