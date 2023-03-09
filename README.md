@@ -43,7 +43,6 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/71537050/224162404-62f27607-4fd4-4451-9ce8-8e8bb64d9900.png">
->
 </p>
 <p align="center">
 
