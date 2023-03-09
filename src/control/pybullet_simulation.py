@@ -18,24 +18,24 @@ def main():
     
     #Initializing start position and orientation
     start_pos = [0,0,0]
-    start_orientation = p.getQuaternionFromEuler([0,0,np.pi]) #converts roll pitch yaw angles of obj to quaternion
+    start_orientation = p.getQuaternionFromEuler([0,0,0]) #converts roll pitch yaw angles of obj to quaternion
     
     pendulum_id = p.loadURDF("../robot/double_pendulum_with_saturation.urdf",start_pos, start_orientation, useFixedBase=1) #move one directory up
     p.setTimeStep(1./240.) #updates the simulation every 1/240 seconds (240 times per second)
 
     # Set up PID controllers
     kp = 10
-    kd = 0.5
+    kd = 5
     ki = 0.5
     ts = 1./240.
     discretization_method = DiscretizationMethod.EULER_BACKWARD
     pid1 = PID(kp, kd, ki, ts, discretization_method)
     pid2 = PID(kp, kd, ki, ts, discretization_method)
 
-    desired_end_effector_pos = [1, 2, 0] # x, y, z position of the end effector
+    desired_end_effector_pos = [.5, -.3, 0] # x, y, z position of the end effector
     
-    l1 = 1 
-    l2 = 1  
+    l1 = 2
+    l2 = 2
     ik = inverse_kinematics_planar(desired_end_effector_pos, l1, l2)
 
     tolerance = 0.01
@@ -68,6 +68,7 @@ def main():
         
         error = np.linalg.norm(np.array(desired_end_effector_pos) - np.array(end_effector_pos_current))
         
+        print(error)
         if error <= tolerance:
             print("DONE")
             break
