@@ -23,7 +23,7 @@ class PID:
         self.discretization_method = discretization_method
         
         self.saturation_limits = (-1000,1000)
-        
+
         self.i=0
         self.previous_error = 0  
         self.T_t = .05 #tracking time, how fast integral term will be reset

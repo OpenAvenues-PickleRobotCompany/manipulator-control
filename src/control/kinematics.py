@@ -16,11 +16,11 @@ class forward_kinematics_planar:
         
         x1 = self.l1*np.cos(self.theta1)
         y1 = self.l1*np.sin(self.theta1)
-        joint1_pos = (x1,y1) 
+        joint1_pos = (x1,y1,0) 
         
         x2 = x1 + self.l2*np.cos(self.theta1+self.theta2)
         y2 = y1 + self.l2*np.sin(self.theta1+self.theta2)
-        end_effector_pos = (x2,y2)
+        end_effector_pos = (x2,y2,0)
         
         return joint1_pos, end_effector_pos
 
