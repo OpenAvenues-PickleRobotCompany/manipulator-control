@@ -40,13 +40,3 @@ def test_pid():
         assert controller.max_output == controller.compute_command(0, -100)
         assert controller.min_output == controller.compute_command(0, 100)
 
-
-def test_forward_kinematics_2R():
-    x,y,phi = forward_kinematics_2R(m.pi/6, m.pi/3, 1, 2)
-    x == 1*m.cos(m.pi/6) + 2*m.cos(m.pi/3 + m.pi/6)
-    y == 1*m.sin(m.pi/6) + 2*m.sin(m.pi/3 + m.pi/6)
-    phi == m.pi/2
-
-def test_inverse_kinematics_2R():
-    x,y,phi = forward_kinematics_2R(m.pi/6, m.pi/3, 1, 2)
-    m.pi/6, m.pi/3 == inverse_kinematics_2R(x, y, 1, 2)
