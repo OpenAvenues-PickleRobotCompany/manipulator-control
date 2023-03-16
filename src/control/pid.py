@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-class DiscretizationMethod(Enum):
-    EULER_BACKWARD = 'euler_backward'
+
 
 class P:
     def __init__(self, kp: float):
@@ -13,16 +12,14 @@ class P:
     def compute_command(self, desired_state: float, current_state: float):
         return self.kp * (desired_state - current_state)
 
-
 class PID:
-    def __init__(self, kp: float, kd: float, ki: float, ts: float,discretization_method: DiscretizationMethod):
+    def __init__(self, kp: float, kd: float, ki: float, ts: float, sat_limits: tuple):
         self.kp = kp
         self.kd = kd
         self.ki = ki
         self.ts = ts
-        self.discretization_method = discretization_method
         
-        self.saturation_limits = (-1000,1000)
+        self.saturation_limits = sat_limits
 
         self.i=0
         self.previous_error = 0  
@@ -30,7 +27,6 @@ class PID:
 
 
     def compute_command(self, desired_state: float, current_state: float):
-        
         error = desired_state - current_state #current error
         
         #proportional error
@@ -41,17 +37,19 @@ class PID:
         
         #derivative of the error (euler backward: using previous error)
         d = (error - self.previous_error) / self.ts 
-        
+    
         command = p + self.i + d 
-        
-        #if the command is past a saturation point, recompute it. e_p may be negative if the integral error is winded up 
+                
         if command < self.saturation_limits[0]:
+            self.i -= self.ts * (self.ki*error) #if command is saturated, erase the old integral term. 
             saturated_command = self.saturation_limits[0]
             e_p = saturated_command - command
-            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
+            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #recalculate the integral term with backcalculation
             command = p + self.i + d
             
         if command > self.saturation_limits[1]:
+            
+            self.i -= self.i - self.ts * (self.ki*error)
             saturated_command = self.saturation_limits[1] 
             e_p = saturated_command - command
             self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
@@ -62,6 +60,4 @@ class PID:
         return command
         
 
-    
-if __name__ == '__main__':
-    pass
+ 

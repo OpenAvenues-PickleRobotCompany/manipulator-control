@@ -25,7 +25,7 @@ def test_proportional():
 
 
 def test_pid():
-    pid = PID(kp=1,kd=1,ki=1,ts=0.1,discretization_method=DiscretizationMethod.EULER_FORWARD)
+    pid = PID(kp=1,kd=1,ki=1,ts=0.1)
     
     #expect zero
     command = pid.compute_command(desired_state=0, current_state=0)
@@ -39,7 +39,7 @@ def test_pid():
 
 def test_pid_plotting():
     ts=0.01
-    pid = PID(kp=5,kd=.1,ki=.001,ts=ts,discretization_method=DiscretizationMethod.EULER_FORWARD)
+    pid = PID(kp=5,kd=.1,ki=.001,ts=ts)
     
     commands = []
     desired = []
