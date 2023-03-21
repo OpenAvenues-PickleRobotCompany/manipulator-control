@@ -22,21 +22,21 @@ def test_proportional():
 
 def test_pid():
     def test_proportional(self):
-        controller = PID(kp=2, ki=0, kd=0, ts=0.1, discretization_method=DiscretizationMethod.EULER_FORWARD)
+        controller = PID(kp=2, ki=0, kd=0, ts=0.1)
         for i in range(10):
             assert 2*i == controller.compute_command(i, 0)
 
     def test_integral(self):
-        controller = PID(kp=0, ki=2, kd=0, ts=0.1, discretization_method=DiscretizationMethod.EULER_FORWARD)
+        controller = PID(kp=0, ki=2, kd=0, ts=0.1)
         for i in range(10):
             assert i == controller.compute_command(i, 0)
 
     def test_derivative(self):
-        controller = PID(kp=0, ki=0, kd=2, ts=0.1, discretization_method=DiscretizationMethod.EULER_FORWARD)
+        controller = PID(kp=0, ki=0, kd=2, ts=0.1)
         assert 20 == controller.compute_command(0, 10)
 
     def test_integration_limits(self):
-        controller = PID(kp=1, ki=2, kd=0, ts=0.1, discretization_method=DiscretizationMethod.EULER_FORWARD)
+        controller = PID(kp=1, ki=2, kd=0, ts=0.)
         assert controller.max_output == controller.compute_command(0, -100)
         assert controller.min_output == controller.compute_command(0, 100)
 
