@@ -2,7 +2,7 @@
 
 For this project, a robot manipulator is directed by a PID controller.
 
-## Installation
+## Usage
 
 To visualize the arm converging on an input end effector position, download all files and run the code as following:
 
