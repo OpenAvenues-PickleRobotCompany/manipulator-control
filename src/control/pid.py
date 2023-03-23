@@ -39,22 +39,12 @@ class PID:
         d = (error - self.previous_error) / self.ts 
     
         command = p + self.i + d 
-                
-        if command < self.saturation_limits[0]:
-            self.i -= self.ts * (self.ki*error) #if command is saturated, erase the old integral term. 
-            saturated_command = self.saturation_limits[0]
-            e_p = saturated_command - command
-            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #recalculate the integral term with backcalculation
-            command = p + self.i + d
             
-        if command > self.saturation_limits[1]:
-            
-            self.i -= self.i - self.ts * (self.ki*error)
-            saturated_command = self.saturation_limits[1] 
-            e_p = saturated_command - command
-            self.i += self.ts * ( self.ki*error + (1/self.T_t)*e_p ) #integral term with backcalculation 
-            command = p + self.i + d
-            
+        saturated_command = max(self.saturation_limits[0], min(command, self.saturation_limits[1]))
+        e_p = saturated_command - command
+        self.i += ((self.ts /self.T_t)*e_p)
+        command = p + self.i + d
+
         self.previous_error = error
 
         return command

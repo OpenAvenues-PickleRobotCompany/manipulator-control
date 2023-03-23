@@ -2,10 +2,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from control.pid import P, PID
-
-
-import matplotlib.pyplot as plt
-import numpy
+import numpy as np
 
 def test_proportional():
     null_controller = P(kp=0.)

@@ -27,11 +27,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 urdf_path = os.path.join(dir_path, '..', 'src', 'urdfs', 'double_pendulum_with_saturation.urdf')
 
 
-# print("ASDHKJASDASD",urdf_path)
-
-if not (args.x and args.y):
-    parser.error('X and Y coordinates are required.')
-    
 # 1) Define the desired end effector position.
 # 2) Obtain the current theta1, theta2.
 # 3) Use inverse kinematics to obtain the desired theta1, theta2.
@@ -64,7 +59,10 @@ def main():
     l1 = 2
     l2 = 2
     ik = inverse_kinematics_planar(desired_end_effector_pos, l1, l2)
-
+    
+    # Solve inverse kinematics for desired end effector position. Returns the desired angles at the joints
+    desired_theta1, desired_theta2 = ik.compute_angles()
+    
     tolerance = 0.01
     max_iterations = 1000000  # Maximum number of iterations
     stable_iterations = 0   # Counter for stable end effector iterations
@@ -76,9 +74,6 @@ def main():
         # Get joint states
         current_theta1 = p.getJointState(pendulum_id, 0)[0]
         current_theta2 = p.getJointState(pendulum_id, 1)[0]
-
-        # Solve inverse kinematics for desired end effector position. Returns the desired angles at the joints
-        desired_theta1, desired_theta2 = ik.compute_angles()
 
         # Get torque commands from PID controllers
         torque1 = pid1.compute_command(desired_theta1, current_theta1)
