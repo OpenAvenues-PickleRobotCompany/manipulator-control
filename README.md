@@ -1,4 +1,24 @@
 # manipulator-control
+Control the Trajectory of a Robot Manipulator
+## Installation Instructions
+
+### Prerequisites
+
+Before running this code, please make sure you have Python 3 installed on your system.
+
+### Installing Required Packages
+
+To install the required packages for this code, please run the following command in your terminal:
+`pip install -r requirements.txt`
+
+### Running the Code
+
+1. Download the code from the repository.
+2. Open the terminal in the directory where you have downloaded the code.
+3. Run the command `python assignment1.py`.
+4. The code should now run, and you should be able to see the simulation on your screen.
+5. You can modify the code as per your requirements.
+
 
 ## What I learned
 
