@@ -1,5 +1,5 @@
 from enum import Enum
-from Kinematics.Ik import *
+from src.Kinematics.Ik import *
 
 class P:
     def __init__(self, kp: float):
@@ -27,37 +27,30 @@ class PID:
 
     def compute_command(self, desired_state: float, current_state: float):
         error = desired_state - current_state
-        ep = desired_state - self.last_output
-        self.integral += error * self.ts + (1/self.T_t)*ep
+        integral = self.integral + error * self.ts
         derivative = (error - self.last_error) / self.ts
 
         p = self.kp * error
-        i = self.ki * self.integral
+        i = self.ki * integral
         d = self.kd * derivative
 
         command = p + i + d
         if command > self.max_output:
-            aw_term = self.kp * (command - self.max_output)
-            self.integral -= aw_term / self.ki + (1/self.T_t) * ep
-            p = self.kp * error
-            i = self.ki * self.integral
-            d = self.kd * derivative
-            command = p + i + d
+            ep = self.max_output - command
+            integral += 1/self.T_t *self.ts * ep
+            command = p + integral + d
             if command > self.max_output:
                 command = self.max_output
 
         elif command < self.min_output:
-            aw_term = self.kp * (command - self.min_output)
-            self.integral -= (aw_term / self.ki) + (1/self.T_t) * ep
-            p = self.kp * error
-            i = self.ki * self.integral
-            d = self.kd * derivative
-            command = p + i + d
+            ep = self.min_output - command
+            integral += 1/self.T_t *self.ts * ep
+            command = p + integral + d
             if command < self.min_output:
                 command = self.min_output
 
         self.last_error = error
-
+        self.integral = integral
         return command
 
 
