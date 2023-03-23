@@ -32,6 +32,7 @@ urdf_path = os.path.join(dir_path, '..', 'src', 'urdfs', 'double_pendulum_with_s
 # 3) Use inverse kinematics to obtain the desired theta1, theta2.
 # 4) Use PID1, PID2 to obtain torque command based on the desired-current theta values.
 # 5) Apply this torque command to the body id from URDF.
+
 def main():
     
     #Initializing physics client, gravity
@@ -99,7 +100,7 @@ def main():
             break
 
         iteration += 1
-        p.stepSimulation()
+
 
         if iteration >= max_iterations:
             print("Simulation reached maximum number of iterations.")
