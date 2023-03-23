@@ -1,13 +1,6 @@
 import pybullet as p 
-import time 
 import numpy as np
-import sys
 import os
-
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
 from src.control.pid import P, PID
 from src.kinematics.fk import forward_kinematics_planar
 from src.kinematics.ik import inverse_kinematics_planar
@@ -20,12 +13,8 @@ parser.add_argument('y', type=float, help='Y coordinate')
 args = parser.parse_args()
 
 
-# Get the absolute path to the directory containing this script
-dir_path = os.path.dirname(os.path.realpath(__file__))
-
 # Construct the absolute path to the URDF file
-urdf_path = os.path.join(dir_path, '..', 'src', 'urdfs', 'double_pendulum_with_saturation.urdf')
-
+urdf_path = os.path.join('src', 'urdfs', 'double_pendulum_with_saturation.urdf')
 
 # 1) Define the desired end effector position.
 # 2) Obtain the current theta1, theta2.
@@ -47,7 +36,7 @@ def main():
     p.setTimeStep(1./240.) #updates the simulation every 1/240 seconds (240 times per second)
 
     # Set up PID controllers
-    kp = 20
+    kp = 15
     kd = 10
     ki = 0.5
     ts = 1./240.
@@ -70,6 +59,7 @@ def main():
     required_stable_iterations = 100  # Number of required stable iterations to exit the loop
     iteration = 0
    
+    #TODO: fix orientation
     
     while iteration < max_iterations:
         # Get joint states
@@ -79,6 +69,7 @@ def main():
         # Get torque commands from PID controllers
         torque1 = pid1.compute_command(desired_theta1, current_theta1)
         torque2 = pid2.compute_command(desired_theta2, current_theta2)
+        print("TORQUES",torque1,torque2)
 
         # Apply torque to each joint
         p.setJointMotorControl2(pendulum_id, 0, p.TORQUE_CONTROL, force=torque1)
