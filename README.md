@@ -2,11 +2,18 @@
 
 For this project, a robot manipulator is directed by a PID controller.
 
-## Usage
 
-To visualize the arm converging on an input end effector position, download all files and run the code as following:
+## Usage 
 
-```python 
+To visualize the arm converging on an input end effector position, download all requirements:
+
+```
+$ pip install -r requirements.txt
+```
+
+and run the code as following:
+
+``` 
 python \manipulator-control\examples\assignment_1 [x_position] [y_position]
 ```
 
