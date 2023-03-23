@@ -37,29 +37,5 @@ def test_pid():
     assert command > 0
     
 
-def test_pid_plotting():
-    ts=0.01
-    pid = PID(kp=5,kd=.1,ki=.001,ts=ts)
-    
-    commands = []
-    desired = []
-
-    current_state=0
-    
-    desired_state=1000
-    
-    while abs(desired_state - current_state) > 0.1:
-        command = pid.compute_command(desired_state=desired_state, current_state=current_state)
-        commands.append(command)
-        current_state += command #dont just add 
-
-    
-    time = [ts*i for i in range(len(commands))]
-    plt.plot(time,commands)
-    plt.legend(["desired","current"])
-    plt.title("PID Commands")
-    plt.xlabel("Time")
-    plt.ylabel("Command")
-    plt.show()
 
 

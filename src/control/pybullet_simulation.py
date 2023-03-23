@@ -4,6 +4,9 @@ from pid import *
 from kinematics import * 
 import numpy as np
 
+
+#TODO: Fix stopping criteria (check that the final end position is stable--not just that it reaches it once.)
+
 def main():
     
 # 1) Define the desired end effector position.
