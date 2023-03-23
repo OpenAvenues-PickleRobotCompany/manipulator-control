@@ -12,7 +12,16 @@ from src.control.pid import P, PID
 from src.kinematics.fk import forward_kinematics_planar
 from src.kinematics.ik import inverse_kinematics_planar
 
+import argparse
 
+parser = argparse.ArgumentParser(description='PyBullet Simulation')
+parser.add_argument('x', type=float, help='X coordinate')
+parser.add_argument('y', type=float, help='Y coordinate')
+args = parser.parse_args()
+
+if not (args.x and args.y):
+    parser.error('X and Y coordinates are required.')
+    
 # 1) Define the desired end effector position.
 # 2) Obtain the current theta1, theta2.
 # 3) Use inverse kinematics to obtain the desired theta1, theta2.
@@ -40,7 +49,7 @@ def main():
     pid1 = PID(kp, kd, ki, ts, (-1000,1000))
     pid2 = PID(kp, kd, ki, ts, (-1000,1000))
 
-    desired_end_effector_pos = [.5, -.3, 0] # x, y, z position of the end effector
+    desired_end_effector_pos = [args.x, args.y, 0] # x, y, z position of the end effector
     
     l1 = 2
     l2 = 2
