@@ -3,9 +3,9 @@ import time
 import numpy as np
 import sys
 import os
+
 from pathlib import Path
 
-# Assuming your script is in the 'examples' folder
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from src.control.pid import P, PID
@@ -18,6 +18,16 @@ parser = argparse.ArgumentParser(description='PyBullet Simulation')
 parser.add_argument('x', type=float, help='X coordinate')
 parser.add_argument('y', type=float, help='Y coordinate')
 args = parser.parse_args()
+
+
+# Get the absolute path to the directory containing this script
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+# Construct the absolute path to the URDF file
+urdf_path = os.path.join(dir_path, '..', 'src', 'urdfs', 'double_pendulum_with_saturation.urdf')
+
+
+# print("ASDHKJASDASD",urdf_path)
 
 if not (args.x and args.y):
     parser.error('X and Y coordinates are required.')
@@ -37,7 +47,7 @@ def main():
     start_pos = [0,0,0]
     start_orientation = p.getQuaternionFromEuler([0,0,0]) #converts roll pitch yaw angles of obj to quaternion
     
-    pendulum_id = p.loadURDF("../src/urdfs/double_pendulum_with_saturation.urdf",start_pos, start_orientation, useFixedBase=1) #move one directory up
+    pendulum_id = p.loadURDF(urdf_path,start_pos, start_orientation, useFixedBase=1)
     p.setTimeStep(1./240.) #updates the simulation every 1/240 seconds (240 times per second)
 
     # Set up PID controllers
