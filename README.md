@@ -6,6 +6,13 @@ For this project, a robot manipulator is directed by a PID controller.
 
 You may run manipulator-control/examples/assignment_1 {x_position} {y_position} to visualize the arm converging on a desired end effector position.
 
+To visualize the arm converging on an input end effector position, run the code as following:
+
+```python 
+python manipulator-control/examples/assignment_1 [x_position] [y_position]
+```
+
+
 ## 1) 2R Manipulator
 A manipulator with two rotary joints, also known as revolute joints, is referred to as a 2R manipulator. The two revolute joints enable the robot arm to rotate within two degrees of freedom. The base joint rotates around a fixed axis, while the shoulder joint rotates around an axis that is perpendicular to the first joint. These joints allow the robot arm to move in a two-dimensional plane.
 
