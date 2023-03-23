@@ -8,8 +8,7 @@ class inverse_kinematics_planar:
         self.y = end_effector_pos[1] 
         self.l1 = l1
         self.l2 = l2 
-    
-# Computes angles to make the end effector position possible
+
     def compute_angles(self):
         # Check if the desired end-effector position is within the robot's workspace
         eps = 1e-6
@@ -30,8 +29,9 @@ class inverse_kinematics_planar:
         theta2 = math.acos(arg)
 
         # Compute theta1 using atan2()
-        numerator = self.y * self.l1 - self.x * self.l2 * np.sin(theta2)
-        denominator = self.x * self.l2 * np.cos(theta2) + self.y * self.l1
-        theta1 = math.atan2(numerator, denominator)
+        k1 = self.l1 + self.l2 * math.cos(theta2)
+        k2 = self.l2 * math.sin(theta2)
+        theta1 = math.atan2(self.y, self.x) - math.atan2(k2, k1)
 
         return theta1, theta2
+

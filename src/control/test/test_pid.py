@@ -1,4 +1,9 @@
-from src.control.pid import *
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+from control.pid import P, PID
+
+
 import matplotlib.pyplot as plt
 import numpy
 
@@ -25,7 +30,7 @@ def test_proportional():
 
 
 def test_pid():
-    pid = PID(kp=1,kd=1,ki=1,ts=0.1)
+    pid = PID(kp=1,kd=1,ki=1,ts=0.1, sat_limits=(-1000,1000))
     
     #expect zero
     command = pid.compute_command(desired_state=0, current_state=0)
