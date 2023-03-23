@@ -1,10 +1,6 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parents[2]))
-
-from kinematics.fk import forward_kinematics_planar
+from src.kinematics.fk import forward_kinematics_planar
 import numpy as np 
-import math 
+
 
 # fk = (theta1, theta2, l1, l2)
 #np.allclose: returns true if arrays are element-wise equal within  a tolerance 

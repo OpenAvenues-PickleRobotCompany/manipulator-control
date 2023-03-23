@@ -1,8 +1,4 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parents[2]))
-from control.pid import P, PID
-import numpy as np
+from src.control.pid import P, PID
 
 def test_proportional():
     null_controller = P(kp=0.)

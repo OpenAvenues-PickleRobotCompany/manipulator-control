@@ -1,11 +1,8 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-from kinematics.ik import inverse_kinematics_planar
-from kinematics.fk import forward_kinematics_planar
+from src.kinematics.ik import inverse_kinematics_planar
+from src.kinematics.fk import forward_kinematics_planar
 import numpy as np 
-import math 
+
 
 #ik = ((end_effector_pos),l1, l2)
 def test_inverse_kinematics_planar():
