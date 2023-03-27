@@ -14,7 +14,7 @@ $ pip install -r requirements.txt
 and run the code as following:
 
 ``` 
-python -m examples.assignment_1[x_position] [y_position]
+python -m examples.assignment_1 [x_position] [y_position]
 ```
 
 If the desired end effector position has been reached for 100 stable iterations, then the desired position has effectively been reached and the program will exit. Otherwise, the program will exit once the maximum number of iterations is reached (1000000). Since the lengths of the links are both 2 units, the desired end effector position can only be reached if it is at most 4 units away from the origin.
