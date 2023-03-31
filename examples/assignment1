@@ -1,0 +1,58 @@
+import pybullet as p
+import time
+import os
+import sys
+import os
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from src.control.pid import *
+from src.Kinematics import *
+
+if __name__ == '__main__':
+    pass
+
+# Set up the simulation environment
+GRAVITY = -9.81
+physicsClient = p.connect(p.GUI)
+p.setGravity(0, 0, GRAVITY)
+
+# Load the double pendulum URDF file and set initial joint angles
+start_pos = [0, 0, 0]
+start_orientation = p.getQuaternionFromEuler([0, 0, 0])
+pendulum_id = p.loadURDF("src\\robot\\double_pendulum_with_saturation.urdf", start_pos, start_orientation, useFixedBase=True)
+theta1 = 0.0
+theta2 = 0.3
+p.resetJointState(pendulum_id, 0, theta1)
+p.resetJointState(pendulum_id, 1, theta2)
+
+# Set the PID gains and time step
+kp = 10  # Proportional 
+ki = 0.1  # Integral 
+kd = 0.25  # Derivative 
+ts = 1/240
+
+# Initialize the PID controllers
+pid1 = PID(kp, ki, kd, ts)
+pid2 = PID(kp, ki, kd, ts)
+
+# Set the goal position for the end effector and compute the joint angles
+goal = [2, 1, 0]
+L1 = L2 = 2
+theta1_goal, theta2_goal = inverse_kinematics_2R(goal[0], goal[1], L1, L2)
+
+# Run the simulation
+for i in range(50000):
+    # Get the current joint angles and compute the torques using the PID controllers
+    theta1 = p.getJointState(pendulum_id, 0)[0]
+    theta2 = p.getJointState(pendulum_id, 1)[0]
+    torque1 = pid1.compute_command(theta1_goal, theta1)
+    torque2 = pid2.compute_command(theta2_goal, theta2)
+
+    # Apply the torques to the joints and step the simulation
+    p.setJointMotorControl2(pendulum_id, 0, p.TORQUE_CONTROL, force=torque1)
+    p.setJointMotorControl2(pendulum_id, 1, p.TORQUE_CONTROL, force=torque2)
+    p.stepSimulation()
+    time.sleep(ts)
+
+# Disconnect from the simulation
+p.disconnect()

@@ -1,1 +1,2 @@
-manip-control/
+env
+*.pyc

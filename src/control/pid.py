@@ -1,9 +1,5 @@
 from enum import Enum
-
-class DiscretizationMethod(Enum):
-    EULER_FORWARD = 'euler_forward'
-    # EULER_IMPLICIT = 'euler_implicit'
-
+from src.Kinematics.Ik import *
 
 class P:
     def __init__(self, kp: float):
@@ -17,23 +13,44 @@ class P:
 
 
 class PID:
-    def __init__(self, kp: float, kd: float, ki: float, ts: float, discretization_method: DiscretizationMethod):
+    def __init__(self, kp: float, ki: float, kd: float, ts: float, max_output=100, min_output=-100):
         self.kp = kp
         self.kd = kd
         self.ki = ki
         self.ts = ts
-        self.discretization_method = discretization_method
-
-        self.discretize()
-
-    def discretize(self):
-        # TODO: implement
-        pass
+        self.max_output = max_output
+        self.min_output = min_output
+        self.integral = 0.
+        self.last_error = 0.
+        self.last_output = 0.
+        self.T_t = 1        
 
     def compute_command(self, desired_state: float, current_state: float):
-        pass
+        error = desired_state - current_state
+        integral = self.integral + error * self.ts
+        derivative = (error - self.last_error) / self.ts
+
+        p = self.kp * error
+        i = self.ki * integral
+        d = self.kd * derivative
+
+        command = p + i + d
+        if command > self.max_output:
+            ep = self.max_output - command
+            integral += 1/self.T_t *self.ts * ep
+            command = p + integral + d
+            if command > self.max_output:
+                command = self.max_output
+
+        elif command < self.min_output:
+            ep = self.min_output - command
+            integral += 1/self.T_t *self.ts * ep
+            command = p + integral + d
+            if command < self.min_output:
+                command = self.min_output
+
+        self.last_error = error
+        self.integral = integral
+        return command
 
 
-
-if __name__ == '__main__':
-    pass
