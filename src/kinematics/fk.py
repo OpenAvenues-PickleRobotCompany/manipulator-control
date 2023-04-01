@@ -15,13 +15,13 @@ class forward_kinematics_planar:
     def compute_positions(self):
         
         x1 = self.l1*np.cos(self.theta1)
-        y1 = self.l1*np.sin(self.theta1)
-        joint1_pos = (x1,y1,0) 
+        z1 = self.l1*np.sin(self.theta1)
+        joint1_pos = (x1,0,z1) 
         
         x2 = x1 + self.l2*np.cos(self.theta1+self.theta2)
-        y2 = y1 + self.l2*np.sin(self.theta1+self.theta2)
-        end_effector_pos = (x2,y2,0)
-        
+        z2 = z1 + self.l2*np.sin(self.theta1+self.theta2)
+        end_effector_pos = (x2,0,z2)
+
         return joint1_pos, end_effector_pos
 
 
