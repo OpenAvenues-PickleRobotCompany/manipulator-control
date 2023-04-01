@@ -3,10 +3,12 @@ import time
 import os
 import sys
 import os
+import numpy as np
+
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from src.control.pid import *
-from src.Kinematics import *
+from src.Kinematics.Ik import inverse_kinematics_2R
 
 if __name__ == '__main__':
     pass
@@ -22,14 +24,14 @@ start_orientation = p.getQuaternionFromEuler([0, 0, 0])
 os.chdir('C:\\Users\\zsy\\Documents\\GitHub\\manipulator-control')
 pendulum_id = p.loadURDF("src\\robot\\double_pendulum_with_saturation.urdf", start_pos, start_orientation, useFixedBase=True)
 theta1 = 0.0
-theta2 = 0.3
+theta2 = 0.0
 p.resetJointState(pendulum_id, 0, theta1)
 p.resetJointState(pendulum_id, 1, theta2)
 
 # Set the PID gains and time step
 kp = 10  # Proportional 
-ki = 0.1  # Integral 
-kd = 0.25  # Derivative 
+ki = 5  # Integral 
+kd = 0.5  # Derivative 
 ts = 1/240
 
 # Initialize the PID controllers
@@ -37,7 +39,7 @@ pid1 = PID(kp, ki, kd, ts)
 pid2 = PID(kp, ki, kd, ts)
 
 # Set the goal position for the end effector and compute the joint angles
-goal = [2, 1, 0]
+goal = [1.5, 0.5, 0]
 L1 = L2 = 2
 theta1_goal, theta2_goal = inverse_kinematics_2R(goal[0], goal[1], L1, L2)
 
@@ -54,6 +56,12 @@ for i in range(50000):
     p.setJointMotorControl2(pendulum_id, 1, p.TORQUE_CONTROL, force=torque2)
     p.stepSimulation()
     time.sleep(ts)
+    end_effector_pos, _ = p.getLinkState(pendulum_id, 1)[:2]
+    point1 = np.array(end_effector_pos)
+    point2 = np.array(goal)
+    if np.linalg.norm(point2 - point1) < 0.1:
+        print("Goal position reached!")
+        break
 
 # Disconnect from the simulation
 p.disconnect()
