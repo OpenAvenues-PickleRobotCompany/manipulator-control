@@ -21,7 +21,6 @@ p.setGravity(0, 0, GRAVITY)
 # Load the double pendulum URDF file and set initial joint angles
 start_pos = [0, 0, 0]
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-os.chdir('C:\\Users\\zsy\\Documents\\GitHub\\manipulator-control')
 pendulum_id = p.loadURDF("src\\robot\\double_pendulum_with_saturation.urdf", start_pos, start_orientation, useFixedBase=True)
 theta1 = 0.0
 theta2 = 0.0
