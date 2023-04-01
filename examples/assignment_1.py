@@ -22,10 +22,6 @@ urdf_path = os.path.join('src', 'urdfs', 'double_pendulum_with_saturation.urdf')
 # 4) Use PID1, PID2 to obtain torque command based on the desired-current theta values.
 # 5) Apply this torque command to the body id from URDF.
 
-
-
-
-
 def main():
     
     #Initializing physics client, gravity
