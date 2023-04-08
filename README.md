@@ -55,7 +55,7 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
 <p align="center">
-  <img src="![image](https://user-images.githubusercontent.com/71537050/230735802-75ef08e2-1502-4fa0-8688-2a541c0b7ade.png)
+  <img src="![image](https://user-images.githubusercontent.com/71537050/230735855-d3da3fa2-1a91-4b1d-be30-570f84a5bfe9.png)
 "
 </p>
 <p align="center">
