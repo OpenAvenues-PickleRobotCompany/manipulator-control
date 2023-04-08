@@ -1,9 +1,7 @@
 from enum import Enum
 import matplotlib.pyplot as plt 
 import numpy as np
-import math
 
-#test
 
 class P:
     def __init__(self, kp: float):
