@@ -61,8 +61,6 @@ Bullet is a physics simulation engine used for simulating physics-based interact
   PyBullet 2R Simulation. Desired End Effector Position: x=3.0, y=0.0, z=1.50
 </p>
 
- 
-
 ## Sources
 
 - Chakraborty, Nilanjan & Akella, Srinivas & Trinkle, J.C. (Jeff). (2009). Complementarity-based Dynamic Simulation for Kinodynamic Motion Planning. 2009 IEEE/RSJ International Conference on Intelligent Robots and Systems, IROS 2009. 787 - 794. 10.1109/IROS.2009.5354274. 
