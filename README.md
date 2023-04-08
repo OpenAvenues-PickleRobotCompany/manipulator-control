@@ -17,7 +17,7 @@ and run the code as following:
 python -m examples.pid_sim [x_position] [z_position]
 ```
 
-If the desired end effector position has been reached for 100 stable iterations, then the desired position has effectively been reached and the program will exit. Otherwise, the program will exit once the maximum number of iterations is reached (1000000). Since the lengths of the links are both 2 units, the desired end effector position can only be reached if it is at most 4 units away from the origin.
+If the desired end effector position has been reached for 100 stable iterations, then the desired position has effectively been reached and the program will exit. Otherwise, the program will exit once the maximum number of iterations is reached (1000000). Since the lengths of the links are both 3 units, the desired end effector position can only be reached if it is at most 6 units away from the origin.
 
 ## 1) 2R Manipulator
 A manipulator with two rotary joints, also known as revolute joints, is referred to as a 2R manipulator. The two revolute joints enable the robot arm to rotate within two degrees of freedom. The base joint rotates around a fixed axis, while the shoulder joint rotates around an axis that is perpendicular to the first joint. These joints allow the robot arm to move in a two-dimensional plane.
