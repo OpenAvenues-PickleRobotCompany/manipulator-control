@@ -14,10 +14,10 @@ $ pip install -r requirements.txt
 and run the code as following:
 
 ``` 
-python -m examples.assignment_1 [x_position] [z_position]
+python -m examples.pid_sim [x_position] [z_position]
 ```
 
-If the desired end effector position has been reached for 100 stable iterations, then the desired position has effectively been reached and the program will exit. Otherwise, the program will exit once the maximum number of iterations is reached (1000000). Since the lengths of the links are both 2 units, the desired end effector position can only be reached if it is at most 4 units away from the origin.
+If the desired end effector position has been reached for 100 stable iterations, then the desired position has effectively been reached and the program will exit. Otherwise, the program will exit once the maximum number of iterations is reached (1000000). Since the lengths of the links are both 3 units, the desired end effector position can only be reached if it is at most 6 units away from the origin.
 
 ## 1) 2R Manipulator
 A manipulator with two rotary joints, also known as revolute joints, is referred to as a 2R manipulator. The two revolute joints enable the robot arm to rotate within two degrees of freedom. The base joint rotates around a fixed axis, while the shoulder joint rotates around an axis that is perpendicular to the first joint. These joints allow the robot arm to move in a two-dimensional plane.
@@ -55,13 +55,11 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/71537050/224162645-cde76955-18fc-4b49-bc3d-b8e67ad76b84.png">
+  <img src="https://user-images.githubusercontent.com/71537050/230735855-d3da3fa2-1a91-4b1d-be30-570f84a5bfe9.png" alt="image">
 </p>
 <p align="center">
-  PyBullet 2R Simulation. Desired End Effector Position: x=0.5, y=-0.3, z=0
+  PyBullet 2R Simulation. Desired End Effector Position: x=3.0, y=0.0, z=1.50
 </p>
-
- 
 
 ## Sources
 
