@@ -55,10 +55,11 @@ Bullet is a physics simulation engine used for simulating physics-based interact
 - Use forward kinematics to calculate the current end effector position and check if it is close to our desired position.
 
 <p align="center">
-  <img src="https://prnt.sc/kmvi7KPwBzzz">
+  <img src="![image](https://user-images.githubusercontent.com/71537050/230735802-75ef08e2-1502-4fa0-8688-2a541c0b7ade.png)
+"
 </p>
 <p align="center">
-  PyBullet 2R Simulation. Desired End Effector Position: x=0.5, y=-0.3, z=0
+  PyBullet 2R Simulation. Desired End Effector Position: x=3.0, y=0.0, z=1.50
 </p>
 
  
