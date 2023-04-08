@@ -53,7 +53,6 @@
 		</visual>
 	</link>
 
-	<!-- joints section -->
 	<joint name = "joint A" type = "revolute">
 		<parent link = "link A" />
 		<child link = "link B" />
@@ -68,4 +67,6 @@
 		<axis xyz = "0 1 0" />
 		<limit effort="20" lower="-3.14" upper="3.14"/>
 	</joint>
+
+
 </robot>

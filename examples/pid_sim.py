@@ -4,9 +4,19 @@ import os
 from src.control.pid import P, PID
 from src.kinematics.fk import forward_kinematics_planar
 from src.kinematics.ik import inverse_kinematics_planar
-
 import argparse
 
+"""
+PyBullet Simulation for Double Pendulum Arm 
+
+1) Obtains desired end effector position from cmd line arguments
+2Use inverse kinematics to obtain the desired theta1, theta2.
+3) Use PID1, PID2 to obtain torque command based on the desired-current theta values.
+4) Apply this torque command to the body ID from URDF.
+
+"""
+
+#Obtain desired end effector position
 parser = argparse.ArgumentParser(description='PyBullet Simulation')
 parser.add_argument('x', type=float, help='X coordinate')
 parser.add_argument('z', type=float, help='Z coordinate')
@@ -16,63 +26,42 @@ args = parser.parse_args()
 # Construct the absolute path to the URDF file
 urdf_path = os.path.join('src', 'urdfs', 'double_pendulum_with_saturation.urdf')
 
-# 1) Define the desired end effector position.
-# 2) Obtain the current theta1, theta2.
-# 3) Use inverse kinematics to obtain the desired theta1, theta2.
-# 4) Use PID1, PID2 to obtain torque command based on the desired-current theta values.
-# 5) Apply this torque command to the body id from URDF.
-
 def main():
-    
-    #Initializing physics client, gravity
+
+    # Initialize physics client GUI and camera extrinsics
     physicsClient = p.connect(p.GUI)
     add_axes()
-
-
-    camera_distance = 5
-    camera_yaw = 180
-    camera_pitch = 0
-    camera_target_position = [0, 0, 0]
-    p.resetDebugVisualizerCamera(camera_distance, camera_yaw, camera_pitch, camera_target_position)
-
-    p.setGravity(0, 0, -9.81) #sets gravity
+    p.resetDebugVisualizerCamera(5, 180, 0, [0,0,0])
+    p.setGravity(0, 0, -9.81) 
     
-    #Initializing start position and orientation
+    # Initializing start position and orientation
     start_pos = [0,0,0]
-    start_orientation = p.getQuaternionFromEuler([0,np.pi/2,0]) #converts roll pitch yaw angles of obj to quaternion
-    
+    start_orientation = p.getQuaternionFromEuler([0,0,0]) 
     pendulum_id = p.loadURDF(urdf_path,start_pos, start_orientation, useFixedBase=1)
-    p.setTimeStep(1./240) #updates the simulation every 1/240 seconds (240 times per second)
+    p.setTimeStep(1./240) 
 
     # Set up PID controllers
-    kp = 20
-    kd = 5
-    ki = 2
+    kp = 25
+    kd = 10
+    ki = 3
     ts = 1./240.
-
     pid1 = PID(kp, kd, ki, ts, (-1000,1000))
     pid2 = PID(kp, kd, ki, ts, (-1000,1000))
-
-    desired_end_effector_pos = [args.x,0,args.z] # x, y, z position of the end effector
-    
-    l1 = 2
-    l2 = 2
-    
-    ik = inverse_kinematics_planar(desired_end_effector_pos, l1, l2)
+    desired_end_effector_pos = [-args.z,0,args.x] 
+    (l1, l2) = (3,3)
     
     # Solve inverse kinematics for desired end effector position. Returns the desired angles at the joints
+    ik = inverse_kinematics_planar(desired_end_effector_pos, l1, l2)
     desired_theta1, desired_theta2 = ik.compute_angles()
 
     tolerance = 0.05
-    max_iterations = 100000000  # Maximum number of iterations
-    stable_iterations = 0   # Counter for stable end effector iterations
-    required_stable_iterations = 100000  # Number of required stable iterations to exit the loop
+    max_iterations = 100000000  
+    stable_iterations = 0   
+    required_stable_iterations = 100000  
     iteration = 0
     
     label_created = False
     label_update_frequency = 5000
-    label_color = [0, 0, 1]  # Blue color
-    label_size = 1.5
        
     while iteration < max_iterations:
         # Get joint states
@@ -91,36 +80,33 @@ def main():
         fk = forward_kinematics_planar(current_theta1, current_theta2, l1, l2)
         end_effector_pos_current = fk.compute_positions()[1]
         
-        
         #Create label according to frequency 
         if iteration % label_update_frequency == 0:
             if label_created:
-                p.removeUserDebugItem(desired_label_id)  # Remove the previous desired label
-                p.removeUserDebugItem(current_label_id)  # Remove the previous current label
+                p.removeUserDebugItem(desired_label_id)  
+                p.removeUserDebugItem(current_label_id) 
 
-            # Desired label
-            desired_label_position = [-0.75, 0, 2.5]
-            desired_label_text = f"Desired: ({desired_end_effector_pos[0]:.2f}, {desired_end_effector_pos[2]:.2f})"
+            # Desired position label
+            desired_label_text = f"Desired: ({desired_end_effector_pos[2]:.2f}, {-desired_end_effector_pos[0]:.2f})"
             desired_label_id = p.addUserDebugText(
                 text=desired_label_text,
-                textPosition=desired_label_position,
-                textColorRGB=label_color,
-                textSize=label_size,
+                textPosition=[-0.5, 0, 2.5],
+                textColorRGB=[0, 0, 1],
+                textSize=1.5,
             )
 
-            # Current label
-            current_label_position = [-0.75, 0, 2]
-            current_label_text = f"Current: ({end_effector_pos_current[0]:.2f}, {end_effector_pos_current[2]:.2f})"
+            # Current position label
+            current_label_text = f"Current: ({end_effector_pos_current[2]:.2f}, {-end_effector_pos_current[0]:.2f})"
             current_label_id = p.addUserDebugText(
                 text=current_label_text,
-                textPosition=current_label_position,
-                textColorRGB=label_color,
-                textSize=label_size,
+                textPosition=[-0.5, 0, 2],
+                textColorRGB=[0, 0, 1],
+                textSize=1.5,
             )
-            
+
             label_created = True
 
-        
+        #Check if error is in acceptable range for required number of stable iterations
         error = np.linalg.norm(np.array(desired_end_effector_pos) - np.array(end_effector_pos_current))
 
         if error <= tolerance:
@@ -129,7 +115,7 @@ def main():
             stable_iterations = 0
 
         if stable_iterations >= required_stable_iterations:
-            print("DONE")
+            print("Convergence Reached.")
             break
 
         iteration += 1
@@ -138,14 +124,12 @@ def main():
             print("Simulation reached maximum number of iterations.")
 
         p.stepSimulation()
-
     p.disconnect()
     
     
-    
+#Draws axis lines for the 2D view of the arm
 def add_axes(length=1.0):
     p.addUserDebugLine([0, 0, 0], [length, 0, 0], [1, 0, 0], lineWidth=2)
-    p.addUserDebugLine([0, 0, 0], [0, length, 0], [0, 1, 0], lineWidth=2)
     p.addUserDebugLine([0, 0, 0], [0, 0, length], [0, 0, 1], lineWidth=2)
     p.addUserDebugText("-X", [length, 0, 0], [1, 0, 0], textSize=1.5)
     p.addUserDebugText("Z", [0, 0, length], [0, 0, 1], textSize=1.5)

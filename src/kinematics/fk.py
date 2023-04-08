@@ -11,7 +11,7 @@ class forward_kinematics_planar:
         self.l1=l1
         self.l2=l2
 
-    #Computes positions relative to joint 0 position (x0,y0)
+    #Computes positions relative to joint 0 position 
     def compute_positions(self):
         
         x1 = self.l1*np.cos(self.theta1)
