@@ -1,7 +1,7 @@
 # manipulator-control
 Control the Trajectory of a Robot Manipulator
 
-# Assignment1: 2R Planar Robot Arm Simulation using PyBullet and PID Control
+## Assignment1: 2R Planar Robot Arm Simulation using PyBullet and PID Control
 
 ## Description
 This script simulates a 2R planar robot arm in PyBullet and uses PID controllers to move the end effector to a desired goal position. It also includes forward and inverse kinematics functions for a 2R robot arm.
@@ -35,11 +35,14 @@ To install the required packages for this code, please run the following command
 4. The code should now run, and you should be able to see the simulation on your screen.
 5. You can modify the code as per your requirements.
 
-<!-- This is a comment -->
-<img src="picture.png" alt="Alt Text" width="300" height="200">
-<p> the goal position for the end effector = [1.5, 0.5, 0]</p>
+<p align="center">
+  <img src="picture.png" alt="Alt Text" width="300" height="200">
+  <br>
+  the goal position for the end effector = [1.5, 0.5, 0]
+</p>
 
-# Assignment2: Optimization-based path planner for the planar 2R robot using Crocoddyl
+
+## Assignment2: Optimization-based path planner for the planar 2R robot using Crocoddyl
 
 ## Description
 This script demonstrates the usage of Crocoddyl to solve an optimal control problem for a double pendulum system. The code sets up a shooting problem for the double pendulum, then solves it using the Feasible Direct Differential Dynamic Programming (FDDP) solver. The resulting motion can be plotted and displayed using Gepetto Viewer.
