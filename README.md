@@ -1,7 +1,23 @@
 # manipulator-control
 Control the Trajectory of a Robot Manipulator
-## Installation Instructions
 
+## Assignment1: 2R Planar Robot Arm Simulation using PyBullet and PID Control
+
+## Description
+This script simulates a 2R planar robot arm in PyBullet and uses PID controllers to move the end effector to a desired goal position. It also includes forward and inverse kinematics functions for a 2R robot arm.
+
+## How it works
+1. The forward and inverse kinematics functions for a 2R robot arm are defined.
+2. The P and PID control classes are defined.
+3. The simulation environment is set up, including gravity and loading the double pendulum URDF file.
+4. Initial joint angles are set for the robot arm.
+5. PID gains and time step are defined, and the PID controllers for both joints are initialized.
+6. The desired goal position for the end effector is set, and the corresponding joint angles are computed using inverse kinematics for the 2R arm.
+7. The simulation loop runs, where the current joint angles are obtained, and torques are calculated using the PID controllers. These torques are then applied to the joints, and the simulation is stepped.
+8. The loop continues until the end effector reaches the goal position or the maximum number of iterations is reached.
+9. Finally, the simulation is disconnected.
+
+## Installation Instructions
 ### Prerequisites
 
 Before running this code, please make sure you have Python 3 installed on your system.
@@ -19,29 +35,25 @@ To install the required packages for this code, please run the following command
 4. The code should now run, and you should be able to see the simulation on your screen.
 5. You can modify the code as per your requirements.
 
+<p align="center">
+  <img src="picture.png" alt="Alt Text" width="300" height="200">
+  <br>
+  the goal position for the end effector = [1.5, 0.5, 0]
+</p>
 
-## What I learned
 
-During my first assignment, I learned about three main topics: PID controllers, forward and inverse kinematics, and the PyBullet library.
+## Assignment2: Optimization-based path planner for the planar 2R robot using Crocoddyl
 
-PID controllers are a way to control the behavior of a system based on feedback. They use a mathematical formula to adjust the input to the system in response to the output. I learned about the three parts of a PID controller: proportional, integral, and derivative, and how to tune them to get the desired behavior. Additionally, I learned about time discretization and anti-windup techniques to improve the performance of the controller.
+## Description
+This script demonstrates the usage of Crocoddyl to solve an optimal control problem for a double pendulum system. The code sets up a shooting problem for the double pendulum, then solves it using the Feasible Direct Differential Dynamic Programming (FDDP) solver. The resulting motion can be plotted and displayed using Gepetto Viewer.
 
-Forward and inverse kinematics are a way to calculate the position and orientation of a robot's end effector based on the joint angles. I learned how to use trigonometry and geometry to derive the equations needed for these calculations for a planar 2R robot.
-
-PyBullet is a library that can be used to simulate the behavior of a robot in a virtual environment. I learned how to set up a simulation, load a robot model, and control its joints.
-
-## Issues faced
-
-While working on the assignment, I faced several issues.
-
-The first issue was that I found it difficult to understand the theory behind PID controllers and how to apply it in practice. The mathematical formulas and concepts were new to me, and I had to spend a lot of time studying and experimenting to get a handle on them.
-
-The second issue was that I had difficulty understanding the PyBullet library and how to use it to simulate the robot's behavior. The library had many options and settings, and I had to spend time reading documentation and experimenting with different settings to get the simulation to work as intended.
-
-## Issues remaining to be solved
-
-One issue that remains to be solved is the issue of the arm moving together in the simulation. This may be a result of an error in the kinematics calculations or a problem with the simulation settings, and will require further investigation to resolve. 
-
-## Limits of the current work
-
-The current implementation of the PID controller, kinematics, and simulation is limited in scope and functionality. It is designed for a planar 2R robot, and may not be suitable for more complex scenarios or environments. Additionally, the implementation is not fully optimized, and may require further tuning to achieve optimal performance. There may be other approaches or algorithms that could be explored to improve the implementation.
+## How it works
+1. The double pendulum model is loaded from `example_robot_data`.
+2. The state and actuation models are defined for the double pendulum system.
+3. Running and terminal cost models are set up, including regularization costs.
+4. Integrated action models are created using the defined cost models.
+5. A shooting problem is constructed using the initial state, running models, and terminal model.
+6. The FDDP solver is initialized with the shooting problem.
+7. Solver callbacks are set based on the user's display and plot preferences.
+8. The solver is used to find the optimal solution for the double pendulum problem.
+9. The motion is plotted and displayed using Gepetto Viewer (if requested).
