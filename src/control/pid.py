@@ -1,5 +1,4 @@
 from enum import Enum
-from src.Kinematics.Ik import *
 
 class P:
     def __init__(self, kp: float):
@@ -10,10 +9,8 @@ class P:
 
     def compute_command(self, desired_state: float, current_state: float):
         return self.kp * (desired_state - current_state)
-
-
 class PID:
-    def __init__(self, kp: float, ki: float, kd: float, ts: float, max_output=100, min_output=-100):
+    def __init__(self, kp: float, ki: float, kd: float, ts: float, max_output=1000, min_output=-1000):
         self.kp = kp
         self.kd = kd
         self.ki = ki
@@ -41,7 +38,6 @@ class PID:
             command = p + integral + d
             if command > self.max_output:
                 command = self.max_output
-
         elif command < self.min_output:
             ep = self.min_output - command
             integral += 1/self.T_t *self.ts * ep
@@ -52,5 +48,4 @@ class PID:
         self.last_error = error
         self.integral = integral
         return command
-
 
