@@ -5,7 +5,6 @@ Control the Trajectory of a Robot Manipulator
 
 ## Description
 This script simulates a 2R planar robot arm in PyBullet and uses PID controllers to move the end effector to a desired goal position. It also includes forward and inverse kinematics functions for a 2R robot arm.
-![Alt Text](picture.png)
 
 ## How it works
 1. The forward and inverse kinematics functions for a 2R robot arm are defined.
@@ -36,6 +35,9 @@ To install the required packages for this code, please run the following command
 4. The code should now run, and you should be able to see the simulation on your screen.
 5. You can modify the code as per your requirements.
 
+<!-- This is a comment -->
+<img src="picture.png" alt="Alt Text" width="300" height="200">
+<p> the goal position for the end effector = [1.5, 0.5, 0]</p>
 
 # Assignment2: Optimization-based path planner for the planar 2R robot using Crocoddyl
 
