@@ -20,6 +20,19 @@ To install the required packages for this code, please run the following command
 5. You can modify the code as per your requirements.
 
 
+## PyBullet output:
+The code first sets up the simulation environment by connecting to PyBullet and setting the gravity. It then loads the URDF file for the double pendulum robot and sets the initial joint angles.
+
+Next, it initializes two PID controllers with the specified proportional, integral, derivative gains, and time step. It sets a goal position for the end effector and computes the joint angles using inverse kinematics.
+
+The simulation is then run for 50000 steps. During each step, the current joint angles are retrieved, and the torques are computed using the PID controllers. The torques are then applied to the joints, and the simulation is stepped forward. The end effector position is checked against the goal position, and if it is within 0.1 units, the simulation is stopped.
+
+Finally, the code disconnects from the PyBullet simulation.
+goal = [1.5, 0.5, 0]
+
+![alt text](Screenshot 2023-04-01 021623.png)
+
+
 ## What I learned
 
 During my first assignment, I learned about three main topics: PID controllers, forward and inverse kinematics, and the PyBullet library.
